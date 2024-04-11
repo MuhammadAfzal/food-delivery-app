@@ -7,6 +7,13 @@ import Contact from "./components/Contact";
 import Error from "./components/Error";
 import RestuarantMenu from "./components/RestaurantMenu";
 
+// Chunking
+// Code Splitting
+// Dynamic Bundling
+// lazy Loading
+// on demand loading
+// dynamix imoprt
+
 const About = lazy(() => import("./components/About"));
 const Grovery = lazy(() => import("./components/Grocery"));
 
