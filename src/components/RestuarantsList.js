@@ -1,13 +1,16 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Shimmer from "./Shimmer";
 import RestaurantCard from "./RestuarantCard";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/hooks/useOnlineStatus";
+import useRestuarantsData from "../utils/hooks/useRestuarantsData";
 
 const RestuarantsList = () => {
-  // Local State Variable - Super powerful variable
-  const [listOfRestaurants, setListOfRestraunt] = useState([]);
-  const [filteredRestaurant, setFilteredRestaurant] = useState([]);
+  const {
+    listOfRestaurants,
+    filteredRestaurants,
+    setFilteredRestaurants,
+  } = useRestuarantsData();
 
   const [searchText, setSearchText] = useState("");
 
@@ -15,26 +18,6 @@ const RestuarantsList = () => {
 
   // Whenever state variables update, react triggers a reconciliation cycle(re-renders the component)
   console.log("Body Rendered");
-
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    const data = await fetch(
-      "https://corsproxy.io/?https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9351929&lng=77.62448069999999&page_type=DESKTOP_WEB_LISTING"
-    );
-
-    const json = await data.json();
-
-    // Optional Chaining
-    setListOfRestraunt(
-      json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
-    );
-    setFilteredRestaurant(
-      json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants
-    );
-  };
 
   if (!onlineStatus) {
     return (
@@ -62,11 +45,11 @@ const RestuarantsList = () => {
               // searchText
               console.log(searchText);
 
-              const filteredRestaurant = listOfRestaurants.filter((res) =>
+              const filteredRestaurants = listOfRestaurants.filter((res) =>
                 res.info.name.toLowerCase().includes(searchText.toLowerCase())
               );
 
-              setFilteredRestaurant(filteredRestaurant);
+              setFilteredRestaurants(filteredRestaurants);
             }}
           >
             Search
@@ -78,14 +61,14 @@ const RestuarantsList = () => {
             const filteredList = listOfRestaurants.filter(
               (res) => res.info.avgRating > 4
             );
-            setListOfRestraunt(filteredList);
+            setFilteredRestaurants(filteredList);
           }}
         >
           Top Rated Restaurants
         </button>
       </div>
       <div className="res-container">
-        {filteredRestaurant.map((restaurant) => (
+        {filteredRestaurants.map((restaurant) => (
           <Link
             key={restaurant?.info?.id}
             to={"/restaurants/" + restaurant.info.id}
