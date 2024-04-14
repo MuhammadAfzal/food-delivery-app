@@ -15,6 +15,9 @@ const RestuarantMenu = () => {
     resInfo?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]?.card
       ?.card;
 
+  if (!itemCards)
+    return <h1>Something went wrong! Looks like API has changed.</h1>;
+
   return (
     <div className="menu">
       <h1>{name}</h1>
