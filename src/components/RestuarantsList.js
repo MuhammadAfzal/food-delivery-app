@@ -1,15 +1,17 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Shimmer from "./Shimmer";
 import RestaurantCard, { withPromotedLabel } from "./RestuarantCard";
 import { Link } from "react-router-dom";
 import useOnlineStatus from "../utils/hooks/useOnlineStatus";
 import useRestuarantsData from "../utils/hooks/useRestuarantsData";
+import UserContext from "../utils/context/UserContext";
 
 const RestuarantsList = () => {
   const { listOfRestaurants, filteredRestaurants, setFilteredRestaurants } =
     useRestuarantsData();
 
   const [searchText, setSearchText] = useState("");
+  const { loggedInUser, setUserName } = useContext(UserContext);
 
   const onlineStatus = useOnlineStatus();
 
@@ -54,6 +56,18 @@ const RestuarantsList = () => {
           >
             Search
           </button>
+        </div>
+        <div className="flex items-center m-4 p-4">
+          <input
+            type="text"
+            className="border border-solid border-black p-2"
+            value={loggedInUser}
+            onChange={(e) => {
+              <UserContext.Provider
+                value={setUserName(e.target.value)}
+              ></UserContext.Provider>;
+            }}
+          />
         </div>
         <div className="flex items-center m-4 p-4">
           <button
